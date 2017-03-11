@@ -2,7 +2,7 @@
 
 # Script qui copie tout nouveau fichier ou fichier modifié vers le répertoire de destination avec soit :
 #   - les filtres "files_source" sur le nom des fichiers de ./ (ex: ./deploy)
-#   - les fichiers/dossiers de ./ passés en arguments (ex: ./deploy file1 dir2)
+#   - uniquement les fichiers/dossiers de ./ passés en arguments (ex: ./deploy file1 dir2)
 
 # Ce script ne supprime aucun fichier dans le répertoire de destination. Pour supprimer les fichiers en trop, rajouter l'option --delete-during
 
