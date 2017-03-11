@@ -6,5 +6,5 @@ In the deploy file:
 * Set destination folder to deploy (ex: dir_target="thomas@192.168.1.1:/home/python")
 
 ## Usage 
-* Execute ./deploy to deploy all files in ./ with the filter set up
-* Execute ./deploy file1 file2 dir1 to deploy only specific files/folders
+* Execute ./deploy to deploy all files from ./ with the filter
+* Execute "./deploy file1 file2 dir1" to deploy only specific files/folders
