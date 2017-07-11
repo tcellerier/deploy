@@ -1,7 +1,7 @@
 # Automatic file deployment to a local/server directory with rsync
 
 ## Setup 
-In the file deploy.sh:
+In the file deploy:
 * Set the filter you want to apply to the files you want to synchronise (ex: SRC_FILTER="\*.py" or ="\*")
 * Set the source folder (ex: SRC="./")
 * Set destination folder (ex: DEST="thomas@192.168.1.1:/home/thomas/python/")
