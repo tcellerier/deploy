@@ -11,9 +11,9 @@ In the file deploy.sh:
 * Execute "./deploy file1 file2 dir1" to deploy only specific files or folders
 
 * Options:
-* -h to see help menu
-* -m [push|pull|both]
-  * push: pushes SRC files to DEST path (default mode)
-  * pull: pulls files from DEST path to SRC path
-  * both: pushes SRC files to DEST path & then pulls files from DEST path to SRC path
-* -d to remove destination files/dirs that no longer exist in the source
+  * -h to see help menu
+  * -m [push|pull|both]
+    * push: pushes SRC files to DEST path (default mode)
+    * pull: pulls files from DEST path to SRC path
+    * both: pushes SRC files to DEST path & then pulls files from DEST path to SRC path
+  * -d to remove destination files/dirs that no longer exist in the source
