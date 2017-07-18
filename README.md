@@ -15,6 +15,7 @@ In the file deploy.sh:
 
 * Options:
   * -h to see help menu
+  * -n, dry-run: perform a trial run with no changes made
   * -m [push|pull|both]
     * push: pushes SRC files to DEST path (default mode)
     * pull: pulls files from DEST path to SRC path
