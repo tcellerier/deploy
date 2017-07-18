@@ -12,6 +12,7 @@
 #
 #  Options :
 #    -h affiche l'aide
+#    -n mode dry-run, montre ce qui aurait été transféré 
 #    -m push: mode par défaut (synchronisation src -> dest)
 #       pull: synchronisation inverse (dest -> src)
 #       both: synchronisation 'push' puis 'pull'
@@ -37,11 +38,11 @@ DELETE=""    # Comportement par défaut : ne rien supprimer du côté destinatio
 
 
 # Lecture des arguments du script
-while getopts "hm:d" option
+while getopts "hm:dn" option
 do
     case $option in
         h)
-            echo -e "\nUsage: ./deploy.sh [-h] [-m push|pull|both] [-d] [file1 file2 dir1]\n"
+            echo -e "\nUsage: ./deploy.sh [-h] [-n] [-m push|pull|both] [-d] [file1 file2 dir1]\n"
             exit 0
             ;;
         m)
@@ -61,6 +62,9 @@ do
             echo  "Press Return to continue or Ctrl-c to quit ..."
             read -s
             echo ""
+            ;;
+        n)
+            DRY_RUN="--dry-run" # Mode dry-run, montre ce qui aurait été transféré 
             ;;
         \?)
             echo -e "\nInvalid option(s), -h to see help menu\n"
@@ -90,7 +94,9 @@ fi
 
 # Affichage des paramètres
 echo -e "\n--- PARAMETERS --- "
-echo "SRC = $SRC"
+if [ -n "$DRY_RUN" ]; then
+    echo "!! DRY RUN !!" 
+fi
 if [ -n "$SRC_FILES" ]; then
     echo "SRC_FILES = $SRC_FILES" 
 else
@@ -105,13 +111,13 @@ echo -e "SYNC = $SYNC\n------------------\n"
 if [ -z "$SRC_FILES" ]; then
 
     if [ "$SYNC" == "push" ] || [ "$SYNC" == "both" ]; then
-        echo -e "rsync -vhrlt --prune-empty-dirs --exclude='.*' --include='*/' --include=$SRC_FILTER --exclude='*' $DELETE $SRC $DEST\n\n------------------\n"
-        rsync -vhrlt --prune-empty-dirs --exclude='.*' --include='*/' --include=$SRC_FILTER --exclude='*' $DELETE $SRC $DEST
+        echo -e "rsync -vhrlt $DRY_RUN --prune-empty-dirs --exclude='.*' --include='*/' --include=$SRC_FILTER --exclude='*' $DELETE $SRC $DEST\n\n------------------\n"
+        rsync -vhrlt $DRY_RUN --prune-empty-dirs --exclude='.*' --include='*/' --include=$SRC_FILTER --exclude='*' $DELETE $SRC $DEST
     fi
 
     if [ "$SYNC" == "pull" ] || [ "$SYNC" == "both" ]; then
-        echo -e "rsync -vhrlt --prune-empty-dirs --exclude='.*' --include='*/' --include=$SRC_FILTER --exclude='*' $DELETE $DEST $SRC\n\n------------------\n"
-        rsync -vhrlt --prune-empty-dirs --exclude='.*' --include='*/' --include=$SRC_FILTER --exclude='*' $DELETE $DEST $SRC
+        echo -e "rsync -vhrlt $DRY_RUN --prune-empty-dirs --exclude='.*' --include='*/' --include=$SRC_FILTER --exclude='*' $DELETE $DEST $SRC\n\n------------------\n"
+        rsync -vhrlt $DRY_RUN --prune-empty-dirs --exclude='.*' --include='*/' --include=$SRC_FILTER --exclude='*' $DELETE $DEST $SRC
     fi
 
 
@@ -125,8 +131,8 @@ else
         for FILE_I in $SRC_FILES; do
             FULLPATH_FILES+="${SRC}${FILE_I} " # Génération de la liste des répertoires sources complets (SRC + sous-répertoire)
         done
-        echo -e "rsync -vhrlt --prune-empty-dirs --exclude='.*' $DELETE $FULLPATH_FILES $DEST\n\n------------------\n"
-        rsync -vhrlt --prune-empty-dirs --exclude='.*' $DELETE $FULLPATH_FILES $DEST
+        echo -e "rsync -vhrlt $DRY_RUN --prune-empty-dirs --exclude='.*' $DELETE $FULLPATH_FILES $DEST\n\n------------------\n"
+        rsync -vhrlt $DRY_RUN --prune-empty-dirs --exclude='.*' $DELETE $FULLPATH_FILES $DEST
     fi
 
     if [ "$SYNC" == "pull" ] || [ "$SYNC" == "both" ]; then
@@ -135,8 +141,8 @@ else
             FULLPATH_FILES+="${DEST}${FILE_I} " # Génération de la liste des répertoires sources complets (DEST + sous-répertoire)
             shift
         done
-        echo -e "rsync -vhrlt --prune-empty-dirs --exclude='.*' $DELETE $FULLPATH_FILES $SRC\n\n------------------\n"
-        rsync -vhrlt --prune-empty-dirs --exclude='.*' $DELETE $FULLPATH_FILES $SRC
+        echo -e "rsync -vhrlt $DRY_RUN --prune-empty-dirs --exclude='.*' $DELETE $FULLPATH_FILES $SRC\n\n------------------\n"
+        rsync -vhrlt $DRY_RUN --prune-empty-dirs --exclude='.*' $DELETE $FULLPATH_FILES $SRC
     fi
 
 fi
